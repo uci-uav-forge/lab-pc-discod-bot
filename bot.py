@@ -37,6 +37,7 @@ async def update_status():
     while True:
         mem_percent = get_memory_usage()
         cpu_percent = get_cpu_usage()
+        # unused because discord won't display multiple lines of `state`
 
         gpu_stats = get_gpu_stats()
 
@@ -49,10 +50,7 @@ async def update_status():
         vram_total_gb = gpu_stats.memory_total/1000
 
         details = f'''
-        CPU: {cpu_percent}% 
-        RAM: {mem_percent}%
-        GPU: {gpu_stats.utilization}%
-        VRAM: {vram_available_gb:.1f}/{vram_total_gb:.1f} GB
+        GPU: {gpu_stats.utilization}% | {vram_available_gb:.1f}/{vram_total_gb:.1f} GB
         '''
 
         # Update bot's status with GPU and memory usage
