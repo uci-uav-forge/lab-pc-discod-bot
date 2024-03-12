@@ -41,16 +41,17 @@ async def update_status():
 
         gpu_stats = get_gpu_stats()
 
-        if gpu_stats.utilization > 10:
-            name = "The mAP go up 📈"
-        else:
-            name = "Idling"
-
-        vram_available_gb = gpu_stats.memory_available/1000
+        vram_used_gb = gpu_stats.memory_used/1000
         vram_total_gb = gpu_stats.memory_total/1000
 
+        if vram_used_gb > 5:
+            name = "The mAP go up 📈"
+        else:
+            name = "Dust collect on the fans"
+
+
         details = f'''
-        GPU: {gpu_stats.utilization}% | {vram_available_gb:.1f}/{vram_total_gb:.1f} GB
+        GPU: {gpu_stats.utilization}% | {vram_used_gb:.1f}/{vram_total_gb:.1f} GB
         '''
 
         # Update bot's status with GPU and memory usage
@@ -58,7 +59,6 @@ async def update_status():
             type = discord.ActivityType.watching,
             name = name,
             state = details,
-            timestamps = {'start':psutil.boot_time() * 1000},
             assets = {},
             party = {},
             buttons = []
