@@ -45,9 +45,9 @@ async def update_status():
         vram_total_gb = gpu_stats.memory_total/1000
 
         if vram_used_gb > 5:
-            name = "The mAP go up 📈"
+            name = "the mAP go up 📈"
         else:
-            name = "Dust collect on the fans"
+            name = "dust collect on the fans"
 
 
         details = f'''
