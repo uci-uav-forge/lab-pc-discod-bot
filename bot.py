@@ -2,6 +2,7 @@
 import discord
 import psutil
 import asyncio
+from datetime import datetime
 from gpustat.core import GPUStatCollection, GPUStat
 
 
@@ -12,6 +13,8 @@ intents = discord.Intents.default()
 
 # Discord client
 client = discord.Client(intents=intents)
+gpu_on = False
+last_start = None
 
 # Function to get GPU usage
 def get_gpu_stats() -> GPUStat:
@@ -34,6 +37,7 @@ def get_cpu_usage():
 
 # Function to update bot's status
 async def update_status():
+    global gpu_on, last_start
     while True:
         mem_percent = get_memory_usage()
         cpu_percent = get_cpu_usage()
@@ -45,11 +49,15 @@ async def update_status():
         vram_total_gb = gpu_stats.memory_total/1000
 
         if vram_used_gb > 5 or gpu_stats.utilization > 30:
+            if not gpu_on:
+                last_start = datetime.now()
             name = "GPU go brrr 🚀"
             status = discord.Status.online
+            gpu_on = True
         else:
             name = "dust collect on the fans"
             status = discord.Status.do_not_disturb
+            gpu_on = False
 
 
         details = f'''
@@ -64,6 +72,7 @@ async def update_status():
                 state = details,
                 assets = {},
                 party = {},
+                start = last_start,
                 buttons = []
             ),
             status=status
