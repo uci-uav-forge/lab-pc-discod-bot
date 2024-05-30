@@ -46,8 +46,10 @@ async def update_status():
 
         if vram_used_gb > 5 or gpu_stats.utilization > 30:
             name = "GPU go brrr 🚀"
+            status = discord.Status.online
         else:
             name = "dust collect on the fans"
+            status = discord.Status.do_not_disturb
 
 
         details = f'''
@@ -55,14 +57,17 @@ async def update_status():
         '''
 
         # Update bot's status with GPU and memory usage
-        await client.change_presence(activity=discord.Activity(
-            type = discord.ActivityType.watching,
-            name = name,
-            state = details,
-            assets = {},
-            party = {},
-            buttons = []
-        ))
+        await client.change_presence(
+            activity=discord.Activity(
+                type = discord.ActivityType.watching,
+                name = name,
+                state = details,
+                assets = {},
+                party = {},
+                buttons = []
+            ),
+            status=status
+        )
         
         # Wait for 5 seconds before updating again
         await asyncio.sleep(5)
